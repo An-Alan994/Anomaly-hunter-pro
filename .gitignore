@@ -1,4 +1,33 @@
-.env
+# Python
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# virtualenv
+env/
+venv/
+ENV/
+.venv/
+
+# Database
 *.db
+*.sqlite3
+
+# Env
+.env
+
+# Log
 *.log
+
+# Jupyter
+*.ipynb_checkpoints
+
+# VSCode
+.vscode/
+
+# MacOS
+.DS_Store
+
+# System
+Thumbs.db
