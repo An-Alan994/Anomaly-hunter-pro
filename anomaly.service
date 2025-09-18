@@ -1,0 +1,14 @@
+[Unit]
+Description=Anomaly Hunter Pro Bot
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker compose -f /home/YOURUSER/anomaly_hunter_pro/docker-compose.prod.yml up
+ExecStop=/usr/bin/docker compose -f /home/YOURUSER/anomaly_hunter_pro/docker-compose.prod.yml down
+WorkingDirectory=/home/YOURUSER/anomaly_hunter_pro
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target
