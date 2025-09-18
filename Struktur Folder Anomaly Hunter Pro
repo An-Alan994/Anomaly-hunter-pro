@@ -1,12 +1,19 @@
 anomaly-hunter-pro/
 ├── src/
+│   ├── __init__.py
 │   ├── providers.py
 │   ├── redundancy.py
+│   ├── anomaly_detector.py
+│   ├── risk_manager.py
 │   ├── database.py
 │   ├── bot_engine.py
 │   └── main.py
 ├── tests/
-│   └── test_providers.py
+│   ├── __init__.py
+│   ├── test_providers.py
+│   ├── test_anomaly_detector.py
+│   ├── test_risk_manager.py
+│   └── test_bot_engine.py
 ├── data/
 │   └── trading_bot.db
 ├── .env.example
