@@ -1,14 +1,36 @@
-Anomaly-hunter-pro/
-├── anomaly_detector.py
-├── bot_engine.py
-├── database.py
+anomaly_hunter_pro/
+│
+├── providers/
+│   ├── __init__.py
+│   ├── kucoin_provider.py
+│   ├── coingecko_provider.py
+│   └── messari_provider.py
+│
+├── core/
+│   ├── __init__.py
+│   ├── anomaly_detector.py
+│   ├── risk_manager.py
+│   ├── trade_executor.py
+│   └── redundancy.py
+│
+├── data/
+│   ├── __init__.py
+│   └── database.py
+│
+├── utils/
+│   ├── __init__.py
+│   ├── config.py
+│   └── logger.py
+│
 ├── main.py
-├── providers.py
-├── redundancy.py
-├── risk_manager.py
-├── telegram_notifier.py
 ├── requirements.txt
 ├── .env.example
-├── .gitignore
-├── LICENSE
-├── README.md
+├── docker-compose.yml
+├── docker-compose.prod.yml
+├── Dockerfile
+├── deploy.sh
+├── anomaly.service
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yml
+└── README.md
