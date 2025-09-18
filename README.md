@@ -1,34 +1,22 @@
-# Anomaly Hunter Pro
+# ⚡ Anomaly Hunter Pro
+Trading bot kuantitatif hybrid untuk mendeteksi anomali market dan eksekusi otomatis di KuCoin.
 
-## Fitur Utama
-- Deteksi coin hijau di lautan merah (anomaly hunter)
-- Output Telegram edukatif multi-thread ("ANOMALY LAYAK BATTLE")
-- Risk Management otomatis (position size, stop-loss)
-- Redundancy data provider (CoinGecko, KuCoin, CryptoPanic)
-- Logging ke database
+---
 
-## Instalasi di Termux
+## 🚀 Features
+- Multi-provider (KuCoin, CoinGecko, Messari)
+- Redundancy check harga
+- Risk management (position sizing, exposure limit)
+- Structured logging
+- Database SQLite
+- Docker + CI/CD pipeline
+- Telegram deployment notifications
+
+---
+
+## 📦 Install & Run (Dev)
 ```bash
-pkg update
-pkg install python
-pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-## Setup API & Environment
-Salin `.env.example` ke `.env`, isi dengan API key Anda.
-
-## Cara Jalankan
-```bash
-python main.py
-```
-
-## Output Telegram Contoh
-> 🚨 RNDR | Skor: 85/100 | LONG | Entry: $7.70 | SL: $6.90 | R/R: 1:3
-> ⛏️ Anomali: BTC turun -5%, RNDR hijau +12%.
-> 🔍 Net Flow: -$12M, New Addresses +22%, RSI Oversold.
-> 💡 Catalyst: Kerjasama Apple Vision Pro
-> ⚔️ Risk: Size max 2% equity, loss max $210
-
-## Lisensi
-Lihat LICENSE untuk detail hak pakai.
+git clone https://github.com/youruser/anomaly_hunter_pro.git
+cd anomaly_hunter_pro
+cp .env.example .env
+docker compose up --build
