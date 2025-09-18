@@ -1,32 +1,29 @@
-import time
-from bot_engine import AnomalyHunterBot
+from providers.kucoin_provider import KucoinProvider
+from core.redundancy import RedundancyManager
+from core.risk_manager import RiskManager
+from data.database import DatabaseManager
+from utils.logger import StructuredLogger
 
-def main():
-    bot = AnomalyHunterBot()
-    print("=" * 60)
-    print("ANOMALY HUNTER PRO - LONG ONLY THE ANOMALY STRATEGY")
-    print("=" * 60)
-    print("Strategi: Mencari coin hijau di lautan merah")
-    print("Provider: CoinGecko, KuCoin, CryptoPanic")
-    print("Fiturs: Redundancy Check, Risk Management, Anomaly Detection")
-    print("=" * 60)
-    try:
-        iteration_count = 0
-        while True:
-            iteration_count += 1
-            print(f"\n🔄 Iteration #{iteration_count}")
-            print("-" * 40)
-            bot.run_single_iteration()
-            print("⏳ Waiting 5 minutes for next iteration...")
-            time.sleep(300)
-    except KeyboardInterrupt:
-        print("\n🛑 Bot stopped by user")
-    except Exception as e:
-        print(f"\n❌ Error: {e}")
-    finally:
-        print("=" * 60)
-        print("ANOMALY HUNTER PRO - SHUTDOWN COMPLETE")
-        print("=" * 60)
+logger = StructuredLogger()
+db = DatabaseManager()
+kucoin = KucoinProvider()
+risk = RiskManager()
+redundancy = RedundancyManager()
+
+def run():
+    price = kucoin.get_price("BTC-USDT")
+    ok, outlier = redundancy.check_price_discrepancy({"kucoin": price})
+    if not ok:
+        logger.log_trade_signal({"msg": f"Outlier detected from {outlier}"})
+        return
+
+    size = risk.calculate_position_size()
+    # Simulasi trade
+    logger.log_trade_signal({"symbol": "BTC-USDT", "side": "buy", "price": price, "size": size})
+    with db.get_connection() as conn:
+        conn.execute("INSERT INTO trades(symbol, side, price, size) VALUES (?, ?, ?, ?)",
+                     ("BTC-USDT", "buy", price, size))
+        conn.commit()
 
 if __name__ == "__main__":
-    main()
+    run()
