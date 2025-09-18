@@ -1,18 +1,34 @@
-# Anomaly Hunter Pro  
-Bot trading crypto cerdas dengan verifikasi data multi-sumber.
+# Anomaly Hunter Pro
 
-## Fitur Utama  
-- ✅ Redundansi data (CoinGecko + KuCoin API)  
-- ✅ Deteksi discrepancy harga real-time  
-- ✅ Database SQLite untuk logging sinyal  
-- ✅ Modular dan mudah dikembangkan  
+## Fitur Utama
+- Deteksi coin hijau di lautan merah (anomaly hunter)
+- Output Telegram edukatif multi-thread ("ANOMALY LAYAK BATTLE")
+- Risk Management otomatis (position size, stop-loss)
+- Redundancy data provider (CoinGecko, KuCoin, CryptoPanic)
+- Logging ke database
 
-## Instalasi  
-1. `git clone <repo-url>`  
-2. `pip install -r requirements.txt`  
-3. Salin `.env.example` menjadi `.env`  
-4. Isi API keys di file `.env`  
-5. `python src/main.py`  
+## Instalasi di Termux
+```bash
+pkg update
+pkg install python
+pip install --upgrade pip
+pip install -r requirements.txt
+```
 
-## Kontribusi  
-Terbuka untuk kontribusi! Silakan buat issue atau pull request.
+## Setup API & Environment
+Salin `.env.example` ke `.env`, isi dengan API key Anda.
+
+## Cara Jalankan
+```bash
+python main.py
+```
+
+## Output Telegram Contoh
+> 🚨 RNDR | Skor: 85/100 | LONG | Entry: $7.70 | SL: $6.90 | R/R: 1:3
+> ⛏️ Anomali: BTC turun -5%, RNDR hijau +12%.
+> 🔍 Net Flow: -$12M, New Addresses +22%, RSI Oversold.
+> 💡 Catalyst: Kerjasama Apple Vision Pro
+> ⚔️ Risk: Size max 2% equity, loss max $210
+
+## Lisensi
+Lihat LICENSE untuk detail hak pakai.
