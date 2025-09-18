@@ -1,0 +1,16 @@
+anomaly-hunter-pro/
+├── src/
+│   ├── providers.py
+│   ├── redundancy.py
+│   ├── database.py
+│   ├── bot_engine.py
+│   └── main.py
+├── tests/
+│   └── test_providers.py
+├── data/
+│   └── trading_bot.db
+├── .env.example
+├── requirements.txt
+├── .gitignore
+├── LICENSE
+└── README.md
