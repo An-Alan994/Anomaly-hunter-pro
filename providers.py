@@ -1,4 +1,5 @@
-from ratelimit import limits, sleep_and_retry
+import logging
+from ratelimit import limits, sleep_and_retry, RateLimitException
 import os
 import time
 import requests
@@ -9,17 +10,36 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+logging.basicConfig(
+    format="%(asctime)s %(levelname)s: %(message)s",
+    level=logging.INFO
+)
+
 # Rate limit constants
 COINGECKO_RATE_LIMIT = 50  # max 50 calls per minute (CoinGecko doc: 10-50/min)
 KUCOIN_RATE_LIMIT = 10     # max 10 calls per second (Kucoin doc)
 CRYPTOPANIC_RATE_LIMIT = 5 # max 5 calls per second (CryptoPanic free)
 
+def log_rate_limit(calls, period):
+    def decorator(func):
+        @sleep_and_retry
+        @limits(calls=calls, period=period)
+        def wrapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except RateLimitException as e:
+                msg = f"Rate limit hit for {func.__name__}, sleeping for {period} seconds."
+                logging.warning(msg)
+                # Optional: Integrasi alert Telegram di sini
+                raise e
+        return wrapper
+    return decorator
+
 class CoinGeckoProvider:
     BASE_URL = "https://api.coingecko.com/api/v3"
 
     @staticmethod
-    @sleep_and_retry
-    @limits(calls=COINGECKO_RATE_LIMIT, period=60)
+    @log_rate_limit(COINGECKO_RATE_LIMIT, 60)
     def get_price(symbol="bitcoin", vs_currency="usd"):
         try:
             url = f"{CoinGeckoProvider.BASE_URL}/simple/price?ids={symbol}&vs_currencies={vs_currency}&include_24hr_change=true"
@@ -37,8 +57,7 @@ class CoinGeckoProvider:
             return {"error": str(e), "source": "CoinGecko"}
 
     @staticmethod
-    @sleep_and_retry
-    @limits(calls=COINGECKO_RATE_LIMIT, period=60)
+    @log_rate_limit(COINGECKO_RATE_LIMIT, 60)
     def get_market_data(symbols=["bitcoin", "ethereum"], vs_currency="usd"):
         try:
             symbols_str = ",".join(symbols)
@@ -81,8 +100,7 @@ class KucoinProvider:
             "KC-API-KEY-VERSION": "2"
         }
     
-    @sleep_and_retry
-    @limits(calls=KUCOIN_RATE_LIMIT, period=1)
+    @log_rate_limit(KUCOIN_RATE_LIMIT, 1)
     def get_price(self, symbol="BTC-USDT"):
         try:
             url = f"{self.base_url}/api/v1/market/orderbook/level1?symbol={symbol}"
@@ -101,8 +119,7 @@ class KucoinProvider:
         except Exception as e:
             return {"error": str(e), "source": "KuCoin"}
     
-    @sleep_and_retry
-    @limits(calls=KUCOIN_RATE_LIMIT, period=1)
+    @log_rate_limit(KUCOIN_RATE_LIMIT, 1)
     def get_account_balance(self, currency="USDT"):
         try:
             endpoint = "/api/v1/accounts"
@@ -125,8 +142,7 @@ class CryptoPanicProvider:
     BASE_URL = "https://cryptopanic.com/api/v1"
     def __init__(self):
         self.api_key = os.getenv("CRYPTOPANIC_API_KEY", "")
-    @sleep_and_retry
-    @limits(calls=CRYPTOPANIC_RATE_LIMIT, period=1)
+    @log_rate_limit(CRYPTOPANIC_RATE_LIMIT, 1)
     def get_news(self, symbol="BTC", filter="rising"):
         try:
             url = f"{self.BASE_URL}/posts/?auth_token={self.api_key}&currencies={symbol}&filter={filter}"
