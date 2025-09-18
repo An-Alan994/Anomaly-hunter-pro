@@ -1,3 +1,2 @@
-# Upgraded content for requirements.txt
-
-# Your upgraded code here
+requests==2.31.0
+python-dotenv==1.0.0
